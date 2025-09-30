@@ -14,7 +14,7 @@ Simple and basic blackjack API-Rest backend
         "hand": []
     },
     "playerScore": 8,
-    "dealerScore": 18,
+    "dealerScore": 0,
     "gameOver": false,
     "winner": "",
     "playerBust": false,
