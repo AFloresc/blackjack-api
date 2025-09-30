@@ -2,6 +2,26 @@
 # Blackjack API
 
 Simple and basic blackjack API-Rest backend
+
+```
+// Object structure excample:
+{
+    "deck": [],
+    "player": {
+        "hand": []
+    }
+    "dealer": {
+        "hand": []
+    },
+    "playerScore": 8,
+    "dealerScore": 18,
+    "gameOver": false,
+    "winner": "",
+    "playerBust": false,
+    "dealerBust": false
+}
+```
+
 ## API Reference
 
 #### Start Game
