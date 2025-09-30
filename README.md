@@ -1,4 +1,7 @@
 
+# Blackjack API
+
+Simple and basic blackjack API-Rest backend
 ## API Reference
 
 #### Start Game
