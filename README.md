@@ -82,6 +82,55 @@ Get the current state of the Game.\
 
 
 
+## Run Locally
+
+Use it's dockerized, you can use make file.
+
+Executhe the API locally
+
+```bash
+    go run main.go
+```
+
+Compile to get binary
+
+```bash
+    go build -o $(BINARY_NAME) .
+```
+
+Clean binary cache
+
+```bash
+    go clean
+    rm -f $(BINARY_NAME)
+```
+
+Build Docker image
+
+```bash
+    docker build -t $(DOCKER_IMAGE) .
+```
+
+Run Docker container
+
+```bash
+    docker run -p $(PORT):8080 $(DOCKER_IMAGE)
+```
+
+Run Docker container
+
+```bash
+    docker run -p $(PORT):8080 $(DOCKER_IMAGE)
+```
+
+Remove Docker container
+
+```bash
+    docker rm -f blackjack
+
+
+
+
 
 
 
