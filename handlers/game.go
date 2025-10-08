@@ -57,6 +57,14 @@ func RestartGameHandler(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, session.GetState())
 }
 
+func ServiceStatus(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"status":  "ok",
+		"message": "Blackjack API is running...🚀",
+	})
+}
+
 func getSessionID(r *http.Request) string {
 	return r.Header.Get("X-Session-ID")
 }
