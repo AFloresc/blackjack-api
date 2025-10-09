@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-const DEFAULT_ERROR_LEVEL = "Guru Meditaion"
+const DEFAULT_ERROR_LEVEL = "Guru Meditation"
 
 type ErrorResponse struct {
 	Error      string `json:"error"`
 	Details    string `json:"details,omitempty"`
-	ErrorLevel string `json:"details,omitempty"`
+	ErrorLevel string `json:"error_level,omitempty"`
 }
 
 func Respond(w http.ResponseWriter, code int, errMsg string, details string) {

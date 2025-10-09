@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"blackjack-api/errors"
 	"blackjack-api/game"
 
 	"encoding/json"
@@ -324,4 +325,40 @@ func TestMultipleGameSessions(t *testing.T) {
 			t.Errorf("esperado campo 'winner' definido en partida #%d", i+1)
 		}
 	}
+}
+
+func TestHitHandler_NoActiveGame(t *testing.T) {
+	// Reset session a nil para simular que no hay partida
+	session = nil
+
+	req := httptest.NewRequest("POST", "/blackjack/api/v1/hit", nil)
+	rr := httptest.NewRecorder()
+
+	HitHandler(rr, req)
+
+	if rr.Code != http.StatusBadRequest {
+		t.Errorf("esperado status 400, recibido %d", rr.Code)
+	}
+
+	var resp errors.ErrorResponse
+	err := json.Unmarshal(rr.Body.Bytes(), &resp)
+	if err != nil {
+		t.Fatalf("error al parsear JSON: %v", err)
+	}
+
+	if resp.Error != "no hay partida activa" {
+		t.Errorf("error esperado 'no hay partida activa', recibido '%s'", resp.Error)
+	}
+
+	if resp.Details != "Debes iniciar una partida antes de pedir una carta" {
+		t.Errorf("details inesperado: %s", resp.Details)
+	}
+
+	if resp.ErrorLevel != "Guru Meditation" {
+		t.Errorf("error_level inesperado: %s", resp.ErrorLevel)
+	}
+}
+
+func contains(body, substr string) bool {
+	return len(body) > 0 && substr != "" && (body == substr || len(body) >= len(substr) && body[:len(substr)] == substr)
 }
