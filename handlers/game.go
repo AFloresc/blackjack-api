@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	bjerrors "blackjack-api/errors"
 	"blackjack-api/game"
 	"encoding/json"
 	"fmt"
@@ -19,7 +20,8 @@ func StartGameHandler(w http.ResponseWriter, r *http.Request) {
 func HitHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
 	if session == nil || session.GameOver {
-		http.Error(w, "No hay partida activa", http.StatusBadRequest)
+		//http.Error(w, "No hay partida activa", http.StatusBadRequest)
+		bjerrors.Respond(w, http.StatusBadRequest, bjerrors.ErrNoActiveGame.Error(), "Debes iniciar una partida antes de pedir una carta")
 		return
 	}
 	session.Hit()
@@ -30,7 +32,7 @@ func StandHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
 	if session == nil || session.GameOver {
-		http.Error(w, "No hay partida activa", http.StatusBadRequest)
+		bjerrors.Respond(w, http.StatusBadRequest, bjerrors.ErrNoActiveGame.Error(), "Debes iniciar una partida antes de plantarte")
 		return
 	}
 	session.Stand()
@@ -41,7 +43,7 @@ func StateHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
 	if session == nil {
-		http.Error(w, "No hay partida activa", http.StatusBadRequest)
+		bjerrors.Respond(w, http.StatusBadRequest, bjerrors.ErrNoActiveGame.Error(), "Debes iniciar una partida antes de consultar el estado")
 		return
 	}
 	json.NewEncoder(w).Encode(session.GetState())
