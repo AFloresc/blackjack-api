@@ -22,4 +22,4 @@ RUN go build -o blackjack-api .
 EXPOSE 8080
 
 # 🚀 Comando de arranque
-CMD ["./blackjack-api"]
+ENTRYPOINT ["/app/blackjack-api"]
