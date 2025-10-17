@@ -22,15 +22,19 @@ docker-build:
 
 # 🚀 Ejecuta el contenedor Docker
 docker-run:
-	@docker run -p $(PORT):8080 --name blackjack-api $(DOCKER_IMAGE) 
+	@docker run -p $(PORT):8080 --name $(DOCKER_IMAGE)  $(DOCKER_IMAGE) 
 
 # 🧪 Ejecuta en segundo plano
 docker-up:
-	@docker run -d -p $(PORT):8080 --name blackjack-api $(DOCKER_IMAGE)
+	@docker run -d -p $(PORT):8080 --name $(DOCKER_IMAGE) $(DOCKER_IMAGE)
 
 # 🧨 Elimina el contenedor
 docker-down:
-	@docker rm -f blackjack
+	@docker rm -f blackjack-api
 
-
+# 🔄 Reconstruye y reinicia el contenedor limpio
+refresh:
+	@docker rm -f blackjack-api || true
+	@docker build -t $(DOCKER_IMAGE) .
+	@docker run -d -p $(PORT):8080 --name $(DOCKER_IMAGE) $(DOCKER_IMAGE)
 
