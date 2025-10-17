@@ -5,20 +5,21 @@ import (
 	"blackjack-api/game"
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 )
 
 var session *game.GameSession
 
 func StartGameHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
+	showLogs(r)
 	w.Header().Set("Content-Type", "application/json")
 	session = game.NewGameSession()
 	json.NewEncoder(w).Encode(session.GetState())
 }
 
 func HitHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
+	showLogs(r)
 	if session == nil || session.GameOver {
 		//http.Error(w, "No hay partida activa", http.StatusBadRequest)
 		bjerrors.Respond(w, http.StatusBadRequest, bjerrors.ErrNoActiveGame.Error(), "Debes iniciar una partida antes de pedir una carta")
@@ -29,8 +30,9 @@ func HitHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func StandHandler(w http.ResponseWriter, r *http.Request) {
+	showLogs(r)
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
+
 	if session == nil || session.GameOver {
 		bjerrors.Respond(w, http.StatusBadRequest, bjerrors.ErrNoActiveGame.Error(), "Debes iniciar una partida antes de plantarte")
 		return
@@ -40,8 +42,8 @@ func StandHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func StateHandler(w http.ResponseWriter, r *http.Request) {
+	showLogs(r)
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
 	if session == nil {
 		bjerrors.Respond(w, http.StatusBadRequest, bjerrors.ErrNoActiveGame.Error(), "Debes iniciar una partida antes de consultar el estado")
 		return
@@ -59,13 +61,14 @@ func respondWithJSON(w http.ResponseWriter, payload interface{}) {
 }
 
 func RestartGameHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
+	showLogs(r)
+
 	session = game.NewGameSession()
 	respondWithJSON(w, session.GetState())
 }
 
 func ServiceStatus(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("📥 %s %s from %s\n", r.Method, r.URL.Path, r.RemoteAddr)
+	showLogs(r)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"status":  "ok",
@@ -75,4 +78,21 @@ func ServiceStatus(w http.ResponseWriter, r *http.Request) {
 
 func getSessionID(r *http.Request) string {
 	return r.Header.Get("X-Session-ID")
+}
+
+func showLogs(r *http.Request) {
+	ip, port, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		ip = r.RemoteAddr
+		port = "?"
+	}
+	// Detect localhost (IPv4 or IPv6)
+	isLocal := ip == "127.0.0.1" || ip == "::1"
+
+	// Logs
+	if isLocal {
+		fmt.Printf("📥 %s %s from localhost (IP: %s, Port: %s)\n", r.Method, r.URL.Path, ip, port)
+	} else {
+		fmt.Printf("📥 %s %s from %s:%s\n", r.Method, r.URL.Path, ip, port)
+	}
 }
