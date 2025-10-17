@@ -22,7 +22,7 @@ docker-build:
 
 # 🚀 Ejecuta el contenedor Docker
 docker-run:
-	@docker run -p $(PORT):8080 --name $(DOCKER_IMAGE)  $(DOCKER_IMAGE) 
+	@docker run -p $(PORT):8080 --name $(DOCKER_IMAGE) $(DOCKER_IMAGE) 
 
 # 🧪 Ejecuta en segundo plano
 docker-up:
@@ -38,3 +38,10 @@ refresh:
 	@docker build -t $(DOCKER_IMAGE) .
 	@docker run -d -p $(PORT):8080 --name $(DOCKER_IMAGE) $(DOCKER_IMAGE)
 
+# 🛑 Detiene el contenedor sin eliminarlo
+stop:
+	@docker stop $(DOCKER_IMAGE)
+
+# ▶️ Inicia el contenedor detenido
+start:
+	@docker start $(DOCKER_IMAGE)
