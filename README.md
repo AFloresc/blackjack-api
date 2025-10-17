@@ -66,7 +66,7 @@ Returns the final state od the game game\
 ```
 Restarts the current game\
 Creates a new deck shuffled\
-The hands get celaned\
+The hands get cleaned\
 Returns the upodated state of the game\
 
 **Needs a body object with the previous state.**
