@@ -33,9 +33,4 @@ docker-down:
 	@docker rm -f blackjack
 
 
-#make run           # Ejecuta localmente
-#make build         # Compila el binario
-#make docker-build  # Construye la imagen Docker
-#make docker-run    # Ejecuta el contenedor
-#make docker-up     # Ejecuta en segundo plano
-#make docker-down   # Elimina el contenedor
+
