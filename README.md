@@ -24,6 +24,21 @@ Simple and basic blackjack API-Rest backend
 
 ## API Reference
 
+#### Service status
+
+```http
+  GET /blackjack/api/v1/
+```
+
+If servide is running you will get this message\
+
+```
+{
+  "message": "Blackjack API is running...🚀",
+  "status": "ok"
+}
+```
+
 #### Start Game
 
 ```http
