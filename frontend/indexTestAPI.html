@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlackJack API endpoints</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 2em;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 1em;
+        }
+
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 0.6em 1.2em;
+            margin: 0.5em 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+        }
+
+        p {
+            font-weight: bold;
+            margin: 0.5em 0;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #dcdcdc;
+            padding: 1em;
+            border-radius: 6px;
+            overflow: auto;
+            max-height: 400px;
+            font-family: "Courier New", Courier, monospace;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background-color: white;
+            padding: 1.5em;
+            border-radius: 8px;
+            margin-bottom: 2em;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>BlackJack API endpoints</h1>
+
+    <div class="section">
+        <button onclick="isActive()">Is active?</button>
+        <p id="is-active">Server active¿?</p>
+    </div>
+
+    <div class="section">
+        <button onclick="startGame()">Start Game</button>
+        <p id="game">Cards¿?</p>
+        <pre id="game-cards"></pre>
+    </div>
+
+    <script>
+        async function isActive() {
+            const apiUrlIsActive =
+                "http://localhost:8080/blackjack/api/v1/";
+            const messageInP = document.getElementById("is-active");
+            try {
+                const request = await fetch(apiUrlIsActive);
+                if (!request.ok)
+                    throw new Error(`Error HTTP: ${request.status}`);
+                const datos = await request.json();
+                messageInP.textContent = datos.message;
+            } catch (error) {
+                console.error("El servidor no está activo:", error);
+                messageInP.textContent = " ❌ El servidor no está activo";
+            }
+        }
+
+        async function startGame() {
+            const apiUrlStartGame =
+                "http://localhost:8080/blackjack/api/v1/start";
+            const messageInP = document.getElementById("game");
+            try {
+                const request = await fetch(apiUrlStartGame, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!request.ok)
+                    throw new Error(`Error: ${request.status}`);
+
+                const datos = await request.json();
+                messageInP.textContent = "Cards";
+                document.getElementById("game-cards").textContent =
+                    JSON.stringify(datos, null, 2);
+            } catch (error) {
+                console.error("Error al obtener los datos:", error);
+                messageInP.textContent = "⚠️ Error al obtener los datos";
+                document.getElementById("game-cards").textContent = "";
+            }
+        }
+    </script>
+</body>
+
+</html>
