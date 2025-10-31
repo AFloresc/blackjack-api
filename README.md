@@ -59,7 +59,6 @@ Recalculates score\
 If the player's score is > 21 the sate is updated as a bust and the game ends\
 Returns the upodated state of the game\
 
-**Needs a body object with the previous state.**
 
 #### Stand
 
@@ -72,7 +71,6 @@ The winner field is evaluated and updated\
 The game gets checked as finished (gameOver = true)\
 Returns the final state od the game game\
 
-**Needs a body object with the previous state.**
 
 #### Restart
 
@@ -84,7 +82,6 @@ Creates a new deck shuffled\
 The hands get cleaned\
 Returns the upodated state of the game\
 
-**Needs a body object with the previous state.**
 
 #### State
 
@@ -93,7 +90,6 @@ Returns the upodated state of the game\
 ```
 Get the current state of the Game.\
 
-**Needs a body object with the previous state.**
 
 
 
